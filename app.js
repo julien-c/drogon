@@ -1,5 +1,7 @@
 
 var fs = require('fs');
+var _ = require('underscore');
+var EPub = require("epub");
 
 /**
  * Module dependencies.
@@ -31,12 +33,35 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+/*
+ * GET /
+ */
+
 app.get('/', function(req, res) {
-	var name = req.session.epub;
-	console.log(app.get('file-'+name));
+	// var name = req.session.epub;
+	// console.log(app.get('file-'+name));
+	// res.render('index');
 	
-	res.render('index');
+	var epub = new EPub('uploads/0804137501Remote.epub');
+	app.set('epub', epub);
+	
+	epub.on("error", function(err){
+	    console.log("ERROR\n-----");
+	    throw err;
+	});
+	
+	epub.on("end", function() {
+		var firstComponent = epub.flow[0];
+		// res.send(200);
+		res.redirect(firstComponent.href);
+	});
+	
+	epub.parse();
 });
+
+/*
+ * POST /uploads
+ */
 
 app.post('/uploads', function(req, res) {
 	
@@ -54,7 +79,33 @@ app.post('/uploads', function(req, res) {
 	res.json({upload: 'success'});
 });
 
-app.get('/users', user.list);
+app.get('*', function(req, res) {
+	var path = req.params[0].substring(1);
+	console.log(path);
+	var epub = app.get('epub');
+	// console.log(epub.flow);
+	var component = _.findWhere(epub.flow, {href: path});
+	
+	
+	console.log(epub.manifest);
+	
+	// if (component) {
+	// 	epub.getChapter(component.id, function(err, data) {
+	//         if(err){
+	//             console.log(err);
+	//             return;
+	//         }
+	//         console.log("\nFIRST CHAPTER:\n");
+	//         console.log(data); // first 512 bytes
+	//         res.send(data);
+	//     });
+	// }
+	// else {
+	// 	res.send(200);
+	// }
+});
+
+
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
