@@ -1,4 +1,6 @@
 
+var fs = require('fs');
+
 /**
  * Module dependencies.
  */
@@ -17,12 +19,11 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hjs');
 app.use(express.favicon());
 app.use(express.logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded());
-app.use(express.methodOverride());
+app.use(express.bodyParser());
 app.use(express.cookieParser('your secret here'));
 app.use(express.session());
 app.use(app.router);
+app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
@@ -30,7 +31,29 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
+app.get('/', function(req, res) {
+	var name = req.session.epub;
+	console.log(app.get('file-'+name));
+	
+	res.render('index');
+});
+
+app.post('/uploads', function(req, res) {
+	
+	// fs.readFile(req.files.file.path, function(err, data) {
+	// 	var name = req.files.file.name;
+	// 	var newPath = __dirname + "/../uploads/" + name;
+	// 	fs.writeFile(newPath, data, function(err) {
+	// 		res.json({upload: 'success'});
+	// 	});
+	// });
+	
+	var name = req.files.file.name;
+	app.set('file-'+name, fs.readFileSync(req.files.file.path));
+	req.session.epub = name;
+	res.json({upload: 'success'});
+});
+
 app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){

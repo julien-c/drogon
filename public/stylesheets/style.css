@@ -2,7 +2,15 @@ body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-
 a {
   color: #00B7FF;
+}
+.upload {
+  width: 380px;
+  height: 380px;
+  margin: 50px auto;
+  border: 10px dashed #ccc;
+}
+.upload.hover {
+  border: 10px dashed #0c0;
 }
