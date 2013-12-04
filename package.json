@@ -9,7 +9,7 @@
     "express": "3.4.6",
     "hjs": "*",
     "less-middleware": "*",
-    "epub": "~0.1.1",
+    "epub": "git://github.com/julien-c/epub-1.git",
     "underscore": "~1.5.2"
   }
 }

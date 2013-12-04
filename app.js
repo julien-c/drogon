@@ -81,14 +81,13 @@ app.post('/uploads', function(req, res) {
 
 app.get('*', function(req, res) {
 	var path = req.params[0].substring(1);
-	console.log(path);
+	// console.log(path);
 	var epub = app.get('epub');
 	// console.log(epub.flow);
-	var component = _.findWhere(epub.flow, {href: path});
+	// var component = _.findWhere(epub.flow, {href: path});
 	
-	
-	console.log(epub.manifest);
-	
+	// console.log(epub.manifest);
+	// res.send(200);
 	// if (component) {
 	// 	epub.getChapter(component.id, function(err, data) {
 	//         if(err){
@@ -103,6 +102,17 @@ app.get('*', function(req, res) {
 	// else {
 	// 	res.send(200);
 	// }
+	
+	epub.getChapterRaw('c01', function(err, data) {
+		res.send(data);
+	});
+	
+	// epub.getImage('f067', function(err, data, mimeType) {
+ //        console.log(data);
+ //        console.log(mimeType);
+ //        res.send(200);
+ //    });
+	
 });
 
 
