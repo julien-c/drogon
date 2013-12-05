@@ -1,7 +1,8 @@
 
 var fs = require('fs');
 var _ = require('underscore');
-var EPub = require("epub");
+var EPub = require('epub');
+var util = require('util');
 
 /**
  * Module dependencies.
@@ -31,9 +32,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 if ('development' == app.get('env')) {
 	app.use(express.errorHandler());
 	
-	var epub = new EPub(__dirname + '/uploads/0804137501Remote.epub');
-	app.set('epub', epub);
-	epub.parse();
+	// var epub = new EPub(__dirname + '/uploads/0804137501Remote.epub');
+	// app.set('epub', epub);
+	// epub.parse();
 }
 
 
@@ -46,9 +47,15 @@ app.get('*', function(req, res, next) {
 	if (path) {
 		var epub = app.get('epub');
 		if (epub) {
-			if (component = _.findWhere(epub.flow, {href: path})) {
+			var i = -1;
+			var component = _.find(epub.flow, function(item) {
+				i++;
+				return item.href == path; 
+			});
+			if (component) {
+				var js = util.format('<script>var componentPrev = %j; var componentNext = %j;</script>', epub.flow[i-1], epub.flow[i+1]);
 				epub.getChapterRaw(component.id, function(err, html) {
-					html = html.replace('</body>', '<script src="/javascripts/reader.js"></script></body>');
+					html = html.replace('</body>', js + '<script src="/javascripts/reader.js"></script></body>');
 					res.send(html);
 				});
 			}
