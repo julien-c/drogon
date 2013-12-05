@@ -7,7 +7,7 @@
 	<body>
 		<div id="upload" class="upload"></div>
 		
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+		<script src="/javascripts/jquery.min.js"></script>
 		<script src="/javascripts/upload.js"></script>
 	</body>
 </html>
