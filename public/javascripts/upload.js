@@ -12,7 +12,7 @@ var uploadFile = function(file) {
 		if (xhr.readyState == 4) {
 			if (xhr.status == 200) {
 				var response = JSON.parse(xhr.response);
-				window.location = '/' + encodeURIComponent(response.firstComponent.href);
+				window.location = '/' + encodeURI(response.firstComponent.href);
 			}
 		}
 	};
