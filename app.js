@@ -53,7 +53,7 @@ app.get('*', function(req, res, next) {
 				return item.href == path; 
 			});
 			if (component) {
-				var js = util.format('<script>var componentPrev = %j; var componentNext = %j;</script>', epub.flow[i-1], epub.flow[i+1]);
+				var js = util.format('<script>var component = %j; var componentPrev = %j; var componentNext = %j;</script>', epub.flow[i], epub.flow[i-1], epub.flow[i+1]);
 				epub.getChapterRaw(component.id, function(err, html) {
 					html = html.replace('</body>', js + '<script src="/javascripts/reader.js"></script></body>');
 					res.send(html);

@@ -10,7 +10,19 @@ document.onkeydown = function(e) {
 		}
 	}
 	else if (e.which == 27) {
+		localStorage.clear();
 		window.location = '/';
+	}
+	else if (e.which == 46) {
+		localStorage.clear();
+	}
+	else if (e.which == 80) {
+		var out = {};
+		for (var i = 0; i < localStorage.length; i++) {
+			out[localStorage.key(i)] = JSON.parse(localStorage[localStorage.key(i)]);
+		}
+		out = JSON.stringify(out, null, '  ');
+		console.log(out);
 	}
 };
 
@@ -24,6 +36,10 @@ document.onmouseup = function(e) {
 			text: range.toString()
 		};
 		console.log(segment);
+		
+		var segments = (localStorage[component.id]) ? JSON.parse(localStorage[component.id]) : [];
+		segments.push(segment);
+		localStorage[component.id] = JSON.stringify(segments);
 	}
 };
 
