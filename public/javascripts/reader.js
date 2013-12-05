@@ -1,12 +1,12 @@
 document.onkeydown = function(e) {
 	if (e.which == 37) {
 		if (componentPrev) {
-			window.location = '/' + componentPrev.href;
+			window.location = '/' + encodeURIComponent(componentPrev.href);
 		}
 	}
 	else if (e.which == 39) {
 		if (componentNext) {
-			window.location = '/' + componentNext.href;
+			window.location = '/' + encodeURIComponent(componentNext.href);
 		}
 	}
 	else if (e.which == 27) {
